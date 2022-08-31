@@ -51,6 +51,7 @@ import java.util.stream.Collectors;
 
 import static ca.uhn.fhir.context.FhirVersionEnum.DSTU3;
 import static ca.uhn.fhir.context.FhirVersionEnum.R4;
+import static ca.uhn.fhir.context.FhirVersionEnum.R5;
 
 @Service
 public class GoldenResourceHelper {
@@ -151,6 +152,9 @@ public class GoldenResourceHelper {
 	private void validateContextSupported() {
 		FhirVersionEnum fhirVersion = myFhirContext.getVersion().getVersion();
 		if (fhirVersion == R4 || fhirVersion == DSTU3) {
+			return;
+		}
+		if (fhirVersion == R5) {
 			return;
 		}
 		throw new UnsupportedOperationException(Msg.code(1489) + "Version not supported: " + myFhirContext.getVersion().getVersion());

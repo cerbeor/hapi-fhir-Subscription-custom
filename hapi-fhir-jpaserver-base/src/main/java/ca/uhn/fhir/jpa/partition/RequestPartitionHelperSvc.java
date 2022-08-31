@@ -203,6 +203,7 @@ public class RequestPartitionHelperSvc implements IRequestPartitionHelperSvc {
 					.add(RequestDetails.class, theRequest)
 					.addIfMatchesType(ServletRequestDetails.class, theRequest);
 				requestPartitionId = (RequestPartitionId) doCallHooksAndReturnObject(myInterceptorBroadcaster, theRequest, Pointcut.STORAGE_PARTITION_IDENTIFY_CREATE, params);
+				ourLog.warn("2 {}",requestPartitionId);
 
 				//If the interceptors haven't selected a partition, and its a non-partitionable resource anyhow, send to DEFAULT
 				if (nonPartitionableResource && requestPartitionId == null) {
@@ -211,6 +212,7 @@ public class RequestPartitionHelperSvc implements IRequestPartitionHelperSvc {
 			}
 
 			String resourceName = myFhirContext.getResourceType(theResource);
+			ourLog.warn("4 {}",requestPartitionId);
 			validateSinglePartitionForCreate(requestPartitionId, resourceName, Pointcut.STORAGE_PARTITION_IDENTIFY_CREATE);
 
 			return validateNormalizeAndNotifyHooksForRead(requestPartitionId, theRequest, theResourceType);

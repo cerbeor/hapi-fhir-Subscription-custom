@@ -68,7 +68,7 @@ public class MdmSubscriptionLoader {
 	private IMdmSettings myMdmSettings;
 
 	private static final String TOPIC_ID = "r5-mdm-topic";
-	private static final String TOPIC_URL = "hapifhir.io/" + TOPIC_ID; // TODO chang temporary canonical
+	private static final String TOPIC_URL = "hapifhir.io/" + TOPIC_ID; // TODO host the topic somewhere ? may be useless
 	private static final String TOPIC = "{" +
 		"  \"resourceType\": \"SubscriptionTopic\"," +
 		"  \"id\": \"" + TOPIC_URL + "\"," +
@@ -166,8 +166,8 @@ public class MdmSubscriptionLoader {
 		retval.addExtension().setUrl(HapiExtensions.EXTENSION_SUBSCRIPTION_CROSS_PARTITION).setValue(new org.hl7.fhir.r5.model.BooleanType().setValue(true));
 		retval.setChannelType(new Coding("http://terminology.hl7.org/CodeSystem/subscription-channel-type", "message","message"));
 		retval.setEndpoint("channel:" + myChannelNamer.getChannelName(IMdmSettings.EMPI_CHANNEL_NAME, new ChannelProducerSettings()));
-//		retval.setPayload("application/json");
-		IParser parser = myFhirContext.newJsonParser();;
+		retval.setContentType("application/json");
+		IParser parser = myFhirContext.newJsonParser();
 		SubscriptionTopic topic = parser.parseResource(SubscriptionTopic.class,TOPIC);
 		topic.addResourceTrigger().setResource(theCriteria)
 			.addSupportedInteraction(SubscriptionTopic.InteractionTrigger.CREATE)
@@ -175,8 +175,7 @@ public class MdmSubscriptionLoader {
 			.setQueryCriteria(new SubscriptionTopic.SubscriptionTopicResourceTriggerQueryCriteriaComponent()
 //				.setResultForCreate(SubscriptionTopic.CriteriaNotExistsBehavior.TESTPASSES)
 				.setCurrent(theCriteria+"?")
-			)
-			;
+			);
 		retval.setTopicElement(new CanonicalType(TOPIC_URL)); //TODO erase
 		retval.addContained(topic);
 		return retval;
