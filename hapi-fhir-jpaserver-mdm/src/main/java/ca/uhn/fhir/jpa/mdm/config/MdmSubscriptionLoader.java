@@ -155,7 +155,7 @@ public class MdmSubscriptionLoader {
 		return retval;
 	}
 
-	private org.hl7.fhir.r5.model.Subscription buildMdmSubscriptionR5(String theId, String theCriteria) {
+	private org.hl7.fhir.r5.model.Subscription buildMdmSubscriptionR5(String theId, String theCriteria) { //TODO test and improve
 		org.hl7.fhir.r5.model.Subscription retval = new org.hl7.fhir.r5.model.Subscription();
 		retval.setId(theId);
 
