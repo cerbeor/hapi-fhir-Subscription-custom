@@ -34,7 +34,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.base.composite.BaseIdentifierDt;
 import ca.uhn.fhir.rest.param.ParameterUtil;
 
-class TokenCriterion implements ICriterion<TokenClientParam>, ICriterionInternal {
+public class TokenCriterion implements ICriterion<TokenClientParam>, ICriterionInternal {
 
 	private String myValue;
 	private String myName;
