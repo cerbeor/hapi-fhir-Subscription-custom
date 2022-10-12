@@ -147,7 +147,7 @@ public class MdmSubscriptionLoader {
 	private static final String TOPIC_URL = "test/" + TOPIC_ID; // TODO host the topic somewhere ? may be useless
 	private static final String TOPIC = "{" +
 		"  \"resourceType\": \"SubscriptionTopic\"," +
-		"  \"id\": \"" + TOPIC_URL + "\"," +
+		"  \"id\": \"" + TOPIC_ID + "\"," +
 		"  \"url\": \"" + TOPIC_URL + "\"," +
 		"  \"title\": \"Health equity data quality requests within Immunization systems\"," +
 		"  \"status\": \"draft\"," +
@@ -179,7 +179,7 @@ public class MdmSubscriptionLoader {
 //				.setResultForCreate(SubscriptionTopic.CriteriaNotExistsBehavior.TESTPASSES)
 					.setCurrent(theCriteria + "?")
 			);
-		retval.setTopicElement(new CanonicalType(TOPIC_URL)); //TODO erase
+		retval.setTopicElement(new CanonicalType( TOPIC_ID));
 		retval.addContained(topic);
 		return retval;
 	}
