@@ -161,13 +161,13 @@ public class MdmSubscriptionLoader {
 	private org.hl7.fhir.r5.model.Subscription buildMdmSubscriptionR5(String theId, String theCriteria) { //TODO test and improve
 		org.hl7.fhir.r5.model.Subscription retval = new org.hl7.fhir.r5.model.Subscription();
 		retval.setId(theId);
-
 		retval.setReason("MDM");
 		retval.setStatus(Enumerations.SubscriptionState.REQUESTED);
-//		retval.setCriteria(theCriteria);
+
 		retval.getMeta().addTag().setSystem(MdmConstants.SYSTEM_MDM_MANAGED).setCode(MdmConstants.CODE_HAPI_MDM_MANAGED);
 		retval.addExtension().setUrl(HapiExtensions.EXTENSION_SUBSCRIPTION_CROSS_PARTITION).setValue(new org.hl7.fhir.r5.model.BooleanType().setValue(true));
-		retval.setChannelType(new Coding("http://terminology.hl7.org/CodeSystem/subscription-channel-type", "message", "message"));
+		Subscription.SubscriptionChannelType channelType = Subscription.SubscriptionChannelType.MESSAGE;
+		retval.setChannelType(new Coding(channelType.getSystem(), channelType.toCode(), channelType.getDisplay()));
 		retval.setEndpoint("channel:" + myChannelNamer.getChannelName(IMdmSettings.EMPI_CHANNEL_NAME, new ChannelProducerSettings()));
 		retval.setContentType("application/json");
 		IParser parser = myFhirContext.newJsonParser();
@@ -176,7 +176,7 @@ public class MdmSubscriptionLoader {
 			.addSupportedInteraction(SubscriptionTopic.InteractionTrigger.CREATE)
 			.addSupportedInteraction(SubscriptionTopic.InteractionTrigger.UPDATE)
 			.setQueryCriteria(new SubscriptionTopic.SubscriptionTopicResourceTriggerQueryCriteriaComponent()
-//				.setResultForCreate(SubscriptionTopic.CriteriaNotExistsBehavior.TESTPASSES)
+				.setResultForCreate(SubscriptionTopic.CriteriaNotExistsBehavior.TESTPASSES)
 					.setCurrent(theCriteria + "?")
 			);
 		retval.setTopicElement(new CanonicalType( TOPIC_ID));
