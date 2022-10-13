@@ -166,8 +166,7 @@ public class MdmSubscriptionLoader {
 
 		retval.getMeta().addTag().setSystem(MdmConstants.SYSTEM_MDM_MANAGED).setCode(MdmConstants.CODE_HAPI_MDM_MANAGED);
 		retval.addExtension().setUrl(HapiExtensions.EXTENSION_SUBSCRIPTION_CROSS_PARTITION).setValue(new org.hl7.fhir.r5.model.BooleanType().setValue(true));
-		Subscription.SubscriptionChannelType channelType = Subscription.SubscriptionChannelType.MESSAGE;
-		retval.setChannelType(new Coding(channelType.getSystem(), channelType.toCode(), channelType.getDisplay()));
+		retval.setChannelType(new Coding("http://terminology.hl7.org/CodeSystem/subscription-channel-type", "message", "message"));
 		retval.setEndpoint("channel:" + myChannelNamer.getChannelName(IMdmSettings.EMPI_CHANNEL_NAME, new ChannelProducerSettings()));
 		retval.setContentType("application/json");
 		IParser parser = myFhirContext.newJsonParser();
