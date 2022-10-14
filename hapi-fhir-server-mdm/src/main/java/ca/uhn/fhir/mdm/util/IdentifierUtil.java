@@ -62,6 +62,8 @@ public final class IdentifierUtil {
 	 */
 	public static <T extends IBase> T toId(FhirContext theFhirContext, CanonicalEID eid) {
 		switch (theFhirContext.getVersion().getVersion()) {
+			case R5:
+				return (T) eid.toR5();
 			case R4:
 				return (T) eid.toR4();
 			case DSTU3:

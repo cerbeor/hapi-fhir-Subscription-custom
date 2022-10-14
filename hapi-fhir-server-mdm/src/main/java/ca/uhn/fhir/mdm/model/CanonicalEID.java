@@ -84,6 +84,12 @@ public class CanonicalEID {
 			.setSystem(mySystem)
 			.setValue(myValue);
 	}
+	public org.hl7.fhir.r5.model.Identifier toR5(){
+		return new org.hl7.fhir.r5.model.Identifier()
+			.setUse(org.hl7.fhir.r5.model.Identifier.IdentifierUse.fromCode(myUse))
+			.setSystem(mySystem)
+			.setValue(myValue);
+	}
 
 	public  String getSystem() {
 		return mySystem;

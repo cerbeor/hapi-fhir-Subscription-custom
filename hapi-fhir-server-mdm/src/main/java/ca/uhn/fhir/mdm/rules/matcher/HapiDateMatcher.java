@@ -27,6 +27,7 @@ import org.hl7.fhir.instance.model.api.IBase;
 public class HapiDateMatcher implements IMdmFieldMatcher {
 	private final HapiDateMatcherDstu3 myHapiDateMatcherDstu3 = new HapiDateMatcherDstu3();
 	private final HapiDateMatcherR4 myHapiDateMatcherR4 = new HapiDateMatcherR4();
+	private final HapiDateMatcherR5 myHapiDateMatcherR5 = new HapiDateMatcherR5();
 
 	@Override
 	public boolean matches(FhirContext theFhirContext, IBase theLeftBase, IBase theRightBase, boolean theExact, String theIdentifierSystem) {
@@ -35,6 +36,8 @@ public class HapiDateMatcher implements IMdmFieldMatcher {
 				return myHapiDateMatcherDstu3.match(theLeftBase, theRightBase);
 			case R4:
 				return myHapiDateMatcherR4.match(theLeftBase, theRightBase);
+			case R5:
+				return myHapiDateMatcherR5.match(theLeftBase, theRightBase);
 			default:
 				throw new UnsupportedOperationException(Msg.code(1520) + "Version not supported: " + theFhirContext.getVersion().getVersion());
 		}
