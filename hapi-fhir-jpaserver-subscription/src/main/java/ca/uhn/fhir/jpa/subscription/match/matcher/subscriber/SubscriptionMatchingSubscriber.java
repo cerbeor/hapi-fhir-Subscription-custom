@@ -143,7 +143,7 @@ public class SubscriptionMatchingSubscriber implements MessageHandler {
 	private boolean processSubscription(ResourceModifiedMessage theMsg, IIdType theResourceId, ActiveSubscription theActiveSubscription) {
 		// skip if the partitions don't match
 		CanonicalSubscription subscription = theActiveSubscription.getSubscription();
-		if (subscription != null && theMsg.getPartitionId() != null &&
+		if (subscription != null && subscription.getRequestPartitionId() != null && theMsg.getPartitionId() != null && // TODO send issue about using mdm subscriptions in default partition
 			theMsg.getPartitionId().hasPartitionIds() && !subscription.getCrossPartitionEnabled() &&
 			!theMsg.getPartitionId().hasPartitionId(subscription.getRequestPartitionId())) {
 			return false;
