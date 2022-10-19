@@ -829,7 +829,7 @@
         <resteasy_version>5.0.2.Final</resteasy_version>
         <ph_schematron_version>5.6.5</ph_schematron_version>
         <ph_commons_version>9.5.4</ph_commons_version>
-        <plexus_compiler_api_version>2.9.0</plexus_compiler_api_version>
+        <plexus_compiler_api_version>2.12.1</plexus_compiler_api_version>
         <servicemix_saxon_version>9.8.0-15</servicemix_saxon_version>
         <servicemix_xmlresolver_version>1.2_5</servicemix_xmlresolver_version>
         <swagger_version>2.1.12</swagger_version>
