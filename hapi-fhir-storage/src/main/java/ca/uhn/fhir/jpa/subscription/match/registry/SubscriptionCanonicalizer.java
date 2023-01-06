@@ -440,7 +440,7 @@ public class SubscriptionCanonicalizer {
 			case R5:
 				org.hl7.fhir.r5.model.Subscription subscription = (org.hl7.fhir.r5.model.Subscription) theSubscription;
 				String topicElement = subscription.getTopicElement().getValue();
-				org.hl7.fhir.r5.model.SubscriptionTopic topic = (org.hl7.fhir.r5.model.SubscriptionTopic) subscription.getContained().stream().filter(t -> ("#" + t.getId()).equals(topicElement) || (t.getId()).equals(topicElement)).findFirst().orElse(null);
+				org.hl7.fhir.r5.model.SubscriptionTopic topic = (org.hl7.fhir.r5.model.SubscriptionTopic) subscription.getContained().stream().filter(t -> (t.getId()).equals("#" + topicElement) || (t.getId()).equals("SubscriptionTopic/" + topicElement) || (t.getId()).equals(topicElement)).findFirst().orElse(null);
 				if (topic == null) {
 					ourLog.warn("Missing contained subscription topic in R5 subscription");
 					return null;
