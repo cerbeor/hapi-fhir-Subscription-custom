@@ -71,6 +71,14 @@ public class CanonicalEID {
 			+ "')";
 	}
 
+	public org.hl7.fhir.r5.model.Identifier toR5(){
+		return new org.hl7.fhir.r5.model.Identifier()
+			.setUse(org.hl7.fhir.r5.model.Identifier.IdentifierUse.fromCode(myUse))
+			.setSystem(mySystem)
+			.setValue(myValue);
+	}
+
+
 	public Identifier toR4() {
 		return new Identifier()
 			.setUse(Identifier.IdentifierUse.fromCode(myUse))

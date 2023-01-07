@@ -32,12 +32,17 @@ import ca.uhn.fhir.jpa.subscription.match.registry.SubscriptionLoader;
 import ca.uhn.fhir.mdm.api.IMdmSettings;
 import ca.uhn.fhir.mdm.api.MdmConstants;
 import ca.uhn.fhir.mdm.log.Logs;
+import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.server.exceptions.ResourceGoneException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.util.HapiExtensions;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.Subscription;
+import org.hl7.fhir.r5.model.CanonicalType;
+import org.hl7.fhir.r5.model.Coding;
+import org.hl7.fhir.r5.model.Enumerations;
+import org.hl7.fhir.r5.model.SubscriptionTopic;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,6 +82,12 @@ public class MdmSubscriptionLoader {
 				subscriptions = mdmResourceTypes
 					.stream()
 					.map(resourceType -> buildMdmSubscriptionR4(MDM_SUBSCIPRION_ID_PREFIX + resourceType, resourceType + "?"))
+					.collect(Collectors.toList());
+				break;
+			case R5:
+				subscriptions = mdmResourceTypes
+					.stream()
+					.map(resourceType -> buildMdmSubscriptionR5(MDM_SUBSCIPRION_ID_PREFIX + resourceType, resourceType))
 					.collect(Collectors.toList());
 				break;
 			default:
@@ -129,6 +140,47 @@ public class MdmSubscriptionLoader {
 		channel.setType(Subscription.SubscriptionChannelType.MESSAGE);
 		channel.setEndpoint("channel:" + myChannelNamer.getChannelName(IMdmSettings.EMPI_CHANNEL_NAME, new ChannelProducerSettings()));
 		channel.setPayload("application/json");
+		return retval;
+	}
+
+
+	private static final String TOPIC_ID = "r5-mdm-topic";
+	private static final String TOPIC_URL = "test/" + TOPIC_ID; // TODO host the topic somewhere ? may be useless
+	private static final String TOPIC = "{" +
+		"  \"resourceType\": \"SubscriptionTopic\"," +
+		"  \"id\": \"" + TOPIC_ID + "\"," +
+		"  \"url\": \"" + TOPIC_URL + "\"," +
+		"  \"title\": \"Health equity data quality requests within Immunization systems\"," +
+		"  \"status\": \"draft\"," +
+		"  \"experimental\": true," +
+		"  \"description\": \"Testing communication between EHR and IIS and operation outcome\"," +
+		"  \"notificationShape\": [ {" +
+		"    \"resource\": \"OperationOutcome\"" +
+		"  } ]" +
+		"}";
+
+	private org.hl7.fhir.r5.model.Subscription buildMdmSubscriptionR5(String theId, String theCriteria) { //TODO test and improve
+		org.hl7.fhir.r5.model.Subscription retval = new org.hl7.fhir.r5.model.Subscription();
+		retval.setId(theId);
+		retval.setReason("MDM");
+		retval.setStatus(Enumerations.SubscriptionStatusCodes.REQUESTED);
+
+		retval.getMeta().addTag().setSystem(MdmConstants.SYSTEM_MDM_MANAGED).setCode(MdmConstants.CODE_HAPI_MDM_MANAGED);
+		retval.addExtension().setUrl(HapiExtensions.EXTENSION_SUBSCRIPTION_CROSS_PARTITION).setValue(new org.hl7.fhir.r5.model.BooleanType().setValue(true));
+		retval.setChannelType(new Coding("http://terminology.hl7.org/CodeSystem/subscription-channel-type", "message", "message"));
+		retval.setEndpoint("channel:" + myChannelNamer.getChannelName(IMdmSettings.EMPI_CHANNEL_NAME, new ChannelProducerSettings()));
+		retval.setContentType("application/json");
+		IParser parser = myFhirContext.newJsonParser();
+		SubscriptionTopic topic = parser.parseResource(SubscriptionTopic.class, TOPIC);
+		topic.addResourceTrigger().setResource(theCriteria)
+			.addSupportedInteraction(SubscriptionTopic.InteractionTrigger.CREATE)
+			.addSupportedInteraction(SubscriptionTopic.InteractionTrigger.UPDATE)
+			.setQueryCriteria(new SubscriptionTopic.SubscriptionTopicResourceTriggerQueryCriteriaComponent()
+				.setResultForCreate(SubscriptionTopic.CriteriaNotExistsBehavior.TESTPASSES)
+				.setCurrent(theCriteria + "?")
+			);
+		retval.setTopicElement(new CanonicalType( TOPIC_ID));
+		retval.addContained(topic);
 		return retval;
 	}
 }

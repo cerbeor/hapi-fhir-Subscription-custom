@@ -67,6 +67,8 @@ public final class IdentifierUtil {
 				return (T) eid.toR4();
 			case DSTU3:
 				return (T) eid.toDSTU3();
+			case R5:
+				return (T) eid.toR5();
 		}
 		throw new IllegalStateException(Msg.code(1487) + "Unsupported FHIR version " + theFhirContext.getVersion().getVersion());
 	}
