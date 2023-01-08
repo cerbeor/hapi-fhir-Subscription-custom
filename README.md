@@ -1,8 +1,13 @@
-HAPI FHIR
+HAPI FHIR customized for IIS Sandbox
 =========
 
 HAPI FHIR - Java API for HL7 FHIR Clients and Servers
 
+To install run (Jdk 17 required at least) :
+
+```mvn clean install -DskipTests```
+
+This version was customised from v6.2.4 tag to add support for FHIR R5 subscription and MDM system. To fit the use case of IIS Sandbox and allow experimentation.
 [![License][Badge-License]][Link-License]
 
 ## CI/CD
