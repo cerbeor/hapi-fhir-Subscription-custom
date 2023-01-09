@@ -33,6 +33,10 @@ import java.util.List;
 
 public class BulkExportJobParameters extends BulkExportJobBase {
 
+	/**
+	 * CUSTOM ADDED FOR MULTITENANCY SUPPORT FOR BINARY EXPORT, previously it only stored in DEFAULT partition
+	 */
+	private String tenantId;
 	// list of resource types to export
 	@JsonProperty("resourceTypes")
 	private List<String> myResourceTypes;
@@ -145,6 +149,7 @@ public class BulkExportJobParameters extends BulkExportJobBase {
 
 	public static BulkExportJobParameters createFromExportJobParameters(BulkExportParameters theParameters) {
 		BulkExportJobParameters params = new BulkExportJobParameters();
+		params.setTenantId(theParameters.getTenantId());
 		params.setResourceTypes(theParameters.getResourceTypes());
 		params.setExportStyle(theParameters.getExportStyle());
 		params.setFilters(theParameters.getFilters());
@@ -157,4 +162,11 @@ public class BulkExportJobParameters extends BulkExportJobBase {
 		return params;
 	}
 
+	public String getTenantId() {
+		return tenantId;
+	}
+
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
+	}
 }

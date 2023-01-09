@@ -29,6 +29,10 @@ import java.util.Date;
 import java.util.List;
 
 public class BulkExportParameters extends Batch2BaseJobParameters {
+	/**
+	 * CUSTOM ADDED FOR MULTITENANCY SUPPORT FOR BINARY EXPORT, previously it only stored in DEFAULT partition
+	 */
+	private String tenantId;
 
 	/**
 	 * List of resource types to export.
@@ -158,5 +162,13 @@ public class BulkExportParameters extends Batch2BaseJobParameters {
 
 	public void setOriginalRequestUrl(String theOriginalRequestUrl) {
 		myOriginalRequestUrl = theOriginalRequestUrl;
+	}
+
+	public String getTenantId() {
+		return tenantId;
+	}
+
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
 	}
 }

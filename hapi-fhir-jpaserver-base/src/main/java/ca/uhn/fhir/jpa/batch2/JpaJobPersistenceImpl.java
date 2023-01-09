@@ -174,6 +174,8 @@ public class JpaJobPersistenceImpl implements IJobPersistence {
 	public List<JobInstance> fetchInstances(FetchJobInstancesRequest theRequest, int thePage, int theBatchSize) {
 		String definitionId = theRequest.getJobDefinition();
 		String params = theRequest.getParameters();
+		ourLog.error("DEFINITION_ID {} FETCH_JOB_PARAM {}", definitionId, params); //TODO CUSTOM Remove
+
 		Set<StatusEnum> statuses = theRequest.getStatuses();
 
 		Pageable pageable = PageRequest.of(thePage, theBatchSize);

@@ -136,6 +136,7 @@ public class BulkDataExportProvider {
 		boolean useCache = shouldUseCache(theRequestDetails);
 
 		BulkExportParameters parameters = BulkExportUtils.createBulkExportJobParametersFromExportOptions(theOptions);
+		parameters.setTenantId(theRequestDetails.getTenantId());
 		parameters.setUseExistingJobsFirst(useCache);
 
 		// Set the original request URL as part of the job information, as this is used in the poll-status-endpoint, and is needed for the report.
