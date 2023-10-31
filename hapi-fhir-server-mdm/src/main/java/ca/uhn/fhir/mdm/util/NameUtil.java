@@ -35,6 +35,12 @@ public final class NameUtil {
 
 	public static List<String> extractGivenNames(FhirContext theFhirContext, IBase theBase) {
 		switch (theFhirContext.getVersion().getVersion()) {
+			case R5:
+				org.hl7.fhir.r5.model.HumanName humanNameR5 = (org.hl7.fhir.r5.model.HumanName) theBase;
+				return humanNameR5.getGiven().stream()
+						.map(org.hl7.fhir.r5.model.PrimitiveType::getValueAsString)
+						.filter(s -> !StringUtils.isEmpty(s))
+						.collect(Collectors.toList());
 			case R4:
 				HumanName humanNameR4 = (HumanName) theBase;
 				return humanNameR4.getGiven().stream()
