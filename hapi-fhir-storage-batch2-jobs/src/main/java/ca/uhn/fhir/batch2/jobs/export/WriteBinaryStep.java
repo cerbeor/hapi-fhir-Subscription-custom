@@ -135,7 +135,10 @@ public class WriteBinaryStep
 			// Make sure we don't accidentally reuse an ID. This should be impossible given the
 			// amount of entropy in the IDs but might as well be sure.
 			try {
-				IBaseBinary output = binaryDao.read(binary.getIdElement(), new SystemRequestDetails(), true);
+				SystemRequestDetails systemRequestDetails = new SystemRequestDetails();
+				systemRequestDetails.setTenantId(srd.getRequestPartitionId().getFirstPartitionNameOrNull());
+				systemRequestDetails.setRequestPartitionId(srd.getRequestPartitionId());
+				IBaseBinary output = binaryDao.read(binary.getIdElement(), systemRequestDetails, true);
 				if (output != null) {
 					continue;
 				}

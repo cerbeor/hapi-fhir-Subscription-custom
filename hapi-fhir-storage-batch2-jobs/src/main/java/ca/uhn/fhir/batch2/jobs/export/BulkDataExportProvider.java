@@ -99,27 +99,27 @@ public class BulkDataExportProvider {
 	 */
 	public static final String UNSUPPORTED_BINARY_TYPE = "Binary";
 
-	private static final Logger ourLog = getLogger(BulkDataExportProvider.class);
+	public static final Logger ourLog = getLogger(BulkDataExportProvider.class);
 
 	@Autowired
-	private IInterceptorBroadcaster myInterceptorBroadcaster;
+	public IInterceptorBroadcaster myInterceptorBroadcaster;
 
-	private Set<String> myCompartmentResources;
-
-	@Autowired
-	private FhirContext myFhirContext;
+	public Set<String> myCompartmentResources;
 
 	@Autowired
-	private IJobCoordinator myJobCoordinator;
+	public FhirContext myFhirContext;
 
 	@Autowired
-	private JpaStorageSettings myStorageSettings;
+	public IJobCoordinator myJobCoordinator;
 
 	@Autowired
-	private DaoRegistry myDaoRegistry;
+	public JpaStorageSettings myStorageSettings;
 
 	@Autowired
-	private IRequestPartitionHelperSvc myRequestPartitionHelperService;
+	public DaoRegistry myDaoRegistry;
+
+	@Autowired
+	public IRequestPartitionHelperSvc myRequestPartitionHelperService;
 
 	/**
 	 * $export
@@ -160,7 +160,7 @@ public class BulkDataExportProvider {
 		startJob(theRequestDetails, BulkExportJobParameters);
 	}
 
-	private void startJob(ServletRequestDetails theRequestDetails, BulkExportJobParameters theOptions) {
+	public void startJob(ServletRequestDetails theRequestDetails, BulkExportJobParameters theOptions) {
 		// permission check
 		HookParams params = (new HookParams())
 				.add(BulkExportJobParameters.class, theOptions)
@@ -199,13 +199,13 @@ public class BulkDataExportProvider {
 		writePollingLocationToResponseHeaders(theRequestDetails, response.getInstanceId());
 	}
 
-	private boolean shouldUseCache(ServletRequestDetails theRequestDetails) {
+	public boolean shouldUseCache(ServletRequestDetails theRequestDetails) {
 		CacheControlDirective cacheControlDirective =
 				new CacheControlDirective().parse(theRequestDetails.getHeaders(Constants.HEADER_CACHE_CONTROL));
 		return myStorageSettings.getEnableBulkExportJobReuse() && !cacheControlDirective.isNoCache();
 	}
 
-	private String getServerBase(ServletRequestDetails theRequestDetails) {
+	public String getServerBase(ServletRequestDetails theRequestDetails) {
 		return StringUtils.removeEnd(theRequestDetails.getServerBaseForRequest(), "/");
 	}
 
@@ -279,7 +279,7 @@ public class BulkDataExportProvider {
 	 * @param theTargetResourceName the type of the target
 	 * @param theIdParams           the id(s) to verify exist
 	 */
-	private void validateTargetsExists(
+	public void validateTargetsExists(
 			RequestDetails theRequestDetails, String theTargetResourceName, Iterable<IIdType> theIdParams) {
 		RequestPartitionId partitionId = myRequestPartitionHelperService.determineReadPartitionForRequestForRead(
 				theRequestDetails, theTargetResourceName, theIdParams.iterator().next());
@@ -289,7 +289,7 @@ public class BulkDataExportProvider {
 		}
 	}
 
-	private void validateResourceTypesAllContainPatientSearchParams(Collection<String> theResourceTypes) {
+	public void validateResourceTypesAllContainPatientSearchParams(Collection<String> theResourceTypes) {
 		if (theResourceTypes != null) {
 			List<String> badResourceTypes = theResourceTypes.stream()
 					.filter(resourceType ->
@@ -306,7 +306,7 @@ public class BulkDataExportProvider {
 		}
 	}
 
-	private Set<String> getPatientCompartmentResources() {
+	public Set<String> getPatientCompartmentResources() {
 		if (myCompartmentResources == null) {
 			myCompartmentResources =
 					new HashSet<>(SearchParameterUtil.getAllResourceTypesThatAreInPatientCompartment(myFhirContext));
@@ -537,7 +537,7 @@ public class BulkDataExportProvider {
 		}
 	}
 
-	private void handleDeleteRequest(
+	public void handleDeleteRequest(
 			IPrimitiveType<String> theJobId, HttpServletResponse response, StatusEnum theOrigStatus)
 			throws IOException {
 		IBaseOperationOutcome outcome = OperationOutcomeUtil.newInstance(myFhirContext);
@@ -561,7 +561,7 @@ public class BulkDataExportProvider {
 		response.getWriter().close();
 	}
 
-	private String getTransitionTimeOfJobInfo(JobInstance theInfo) {
+	public String getTransitionTimeOfJobInfo(JobInstance theInfo) {
 		if (theInfo.getEndTime() != null) {
 			return new InstantType(theInfo.getEndTime()).getValueAsString();
 		} else if (theInfo.getStartTime() != null) {
@@ -572,7 +572,7 @@ public class BulkDataExportProvider {
 		}
 	}
 
-	private BulkExportJobParameters buildSystemBulkExportOptions(
+	public BulkExportJobParameters buildSystemBulkExportOptions(
 			IPrimitiveType<String> theOutputFormat,
 			IPrimitiveType<String> theType,
 			IPrimitiveType<Date> theSince,
@@ -589,7 +589,7 @@ public class BulkDataExportProvider {
 				theTypePostFetchFilterUrl);
 	}
 
-	private BulkExportJobParameters buildGroupBulkExportOptions(
+	public BulkExportJobParameters buildGroupBulkExportOptions(
 			IPrimitiveType<String> theOutputFormat,
 			IPrimitiveType<String> theType,
 			IPrimitiveType<Date> theSince,
@@ -617,7 +617,7 @@ public class BulkDataExportProvider {
 		return BulkExportJobParameters;
 	}
 
-	private BulkExportJobParameters buildPatientBulkExportOptions(
+	public BulkExportJobParameters buildPatientBulkExportOptions(
 			IPrimitiveType<String> theOutputFormat,
 			IPrimitiveType<String> theType,
 			IPrimitiveType<Date> theSince,
@@ -645,7 +645,7 @@ public class BulkDataExportProvider {
 		return BulkExportJobParameters;
 	}
 
-	private BulkExportJobParameters buildPatientBulkExportOptions(
+	public BulkExportJobParameters buildPatientBulkExportOptions(
 			IPrimitiveType<String> theOutputFormat,
 			IPrimitiveType<String> theType,
 			IPrimitiveType<Date> theSince,
@@ -665,7 +665,7 @@ public class BulkDataExportProvider {
 		return BulkExportJobParameters;
 	}
 
-	private BulkExportJobParameters buildBulkExportJobParameters(
+	public BulkExportJobParameters buildBulkExportJobParameters(
 			IPrimitiveType<String> theOutputFormat,
 			IPrimitiveType<String> theType,
 			IPrimitiveType<Date> theSince,
@@ -722,7 +722,7 @@ public class BulkDataExportProvider {
 		response.setStatus(Constants.STATUS_HTTP_202_ACCEPTED);
 	}
 
-	private Set<String> splitTypeFilters(List<IPrimitiveType<String>> theTypeFilter) {
+	public Set<String> splitTypeFilters(List<IPrimitiveType<String>> theTypeFilter) {
 		if (theTypeFilter == null) {
 			return null;
 		}
