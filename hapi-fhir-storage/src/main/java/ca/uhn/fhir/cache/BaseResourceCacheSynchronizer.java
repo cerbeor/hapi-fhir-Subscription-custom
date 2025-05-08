@@ -175,8 +175,11 @@ public abstract class BaseResourceCacheSynchronizer implements IResourceChangeLi
 		}
 
 		synchronized (mySyncResourcesLock) {
-			ourLog.debug("Starting sync {}s", myResourceName);
+			ourLog.info("Starting sync {}s", myResourceName);
 
+			if (mySystemRequestDetails == null) {
+				mySystemRequestDetails = SystemRequestDetails.forAllPartitions();
+			}
 			List<IBaseResource> resourceList = (List<IBaseResource>)
 					getResourceDao().searchForResources(provideSearchParameterMap(), mySystemRequestDetails);
 			return syncResourcesIntoCache(resourceList);
