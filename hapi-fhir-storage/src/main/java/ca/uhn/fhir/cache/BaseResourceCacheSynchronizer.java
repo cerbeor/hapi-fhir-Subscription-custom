@@ -173,6 +173,9 @@ public abstract class BaseResourceCacheSynchronizer implements IResourceChangeLi
 		if (isStopping()) {
 			return 0;
 		}
+		if (mySystemRequestDetails == null) {
+			mySystemRequestDetails = SystemRequestDetails.forAllPartitions();
+		}
 
 		synchronized (mySyncResourcesLock) {
 			ourLog.debug("Starting sync {}s", myResourceName);
