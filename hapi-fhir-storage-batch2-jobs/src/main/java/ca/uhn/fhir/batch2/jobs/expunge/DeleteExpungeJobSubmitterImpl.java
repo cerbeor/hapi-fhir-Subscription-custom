@@ -106,6 +106,7 @@ public class DeleteExpungeJobSubmitterImpl implements IDeleteExpungeJobSubmitter
 			RequestPartitionId requestPartition =
 					myRequestPartitionHelperSvc.determineReadPartitionForRequestForServerOperation(
 							theRequestDetails, ProviderConstants.OPERATION_DELETE_EXPUNGE);
+			deleteExpungeJobParameters.setRequestPartitionId(requestPartition); // Temp fix to be tested TODO Clement
 			deleteExpungeJobParameters.addPartitionedUrl(new PartitionedUrl().setRequestPartitionId(requestPartition));
 		}
 		deleteExpungeJobParameters.setCascade(theCascade);
